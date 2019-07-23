@@ -1,0 +1,344 @@
+Suricata Enabled Rules
+-----------------------------------
+
+"DO NOT USE!" categories moved here
+-----------------------------------
+emerging-botcc <<< use list
+emerging-botcc.portgrouped <<< use list
+emerging-ciarmy <<< use list
+emerging-compromised <<< use list
+emerging-drop <<< use list
+emerging-dshield <<< use list
+emerging-telnet <<< Telnet is bad for kittens. Please stop using it. If your multithousand $ networking device does not allow for ssh access to it, please slowly open the window and throw it as far away as you can. Then purchase a multidozen $ networking device that allows ssh access.
+emerging-tftp > all rules in this category are based on port 69. Can be easily taken care of by firewall rules not allowing incoming/outgoing traffic for port 69 and a custom suricata rule. No need to waste processing here. Technically tftp has no place on the internet. >>>At least<<< set up a vpn/tunnel to encrypt the traffic, make sure who you are talking to is who you want to talk to.
+emerging-tor <<< use a list for this
+emerging-netbios <<< Accessing netbios over the internet is considered as being one of the 3 worst mistakes in your life. Please set up *at least* a vpn (ssh tunnel/normal vpn) if you are stubborn and still wish to make this mistake.
+emerging-rbn-malvertisers <<< no longer maintained
+emerging-rbn <<< no longer maintained
+-----------------------------------
+
+The following categories should be enabled.
+Exceptions are listed under the category.
+--- after the category's name means blank at time of writing
+">>>DISABLED:" count allows you to scroll to the bottom of a category and easily check if you need to make changes.
+-----------------------------------
+decoder-events > all except:
+2200003 SURICATA IPv4 truncated packet <<< ***NOISE***
+2200029 SURICATA ICMPv6 unknown type <<< breaks IPv6 tunnels
+2200076 SURICATA ICMPv4 invalid checksum <<< default gateway
+2200079 SURICATA ICMPv6 invalid checksum <<< breaks sixxs's IPv6 tunnels
+2200075 SURICATA UDPv4 invalid checksum <<< DNS servers
+>>>DISABLED:5
+
+dns-events > all except:
+2240003 SURICATA DNS malformed response data <<< DNS servers
+>>>DISABLED:1
+
+emerging-activex > all
+>>>DISABLED:0
+
+emerging-attack_response > all except:
+2100498 GPL ATTACK_RESPONSE id check returned root <<< Based on plaintext value. False positive on http://planet.suricata-ids.org/
+>>>DISABLED:1
+
+emerging-chat > all except:
+2002157 ET CHAT Skype User-Agent detected <<< obvious
+2003022 ET CHAT Skype Bootstrap Node (udp) <<< breaks skype
+2002023 ET CHAT IRC USER command <<< breaks IRC
+2002024 ET CHAT IRC NICK command <<< breaks IRC
+2002025 ET CHAT IRC JOIN command <<< breaks IRC
+2002026 ET CHAT IRC PRIVMSG command <<< breaks IRC
+2002027 ET CHAT IRC PING command <<< breaks IRC
+2002028 ET CHAT IRC PONG response <<< breaks IRC
+2001260 ET CHAT Yahoo IM message <<< debian mirror
+>>DISABLED:9
+
+emerging-current_events > all
+>>>DISABLED:0
+
+emerging-deleted > ---
+
+emerging-dns > all except:
+2008446 ET DNS Excessive DNS Responses with 1 or more RR's (100+ in 10 seconds) - possible Cache Poisoning Attempt
+2008470 ET DNS Excessive NXDOMAIN responses - Possible DNS Backscatter or Domain Generation Algorithm Lookups
+2001117 ET DNS Standard query response, Name Error
+>>>DISABLED:3
+
+emerging-dos > all
+>>>DISABLED:0
+
+emerging-exploit > all except:
+2001022 ET EXPLOIT Invalid non-fragmented packet with fragment offset>0 <<< google
+>>>DISABLED:1
+
+emerging-ftp > all except:
+2010731 ET FTP FTP CWD command attempt without login <<< breaks filezilla
+2100491 GPL FTP FTP Bad login <<< detects single bad login. Can lock out clients if you are a hosting company.
+2010735 ET FTP FTP PWD command attempt without login <<< fires up when filezilla processes a queue without you being connected to a server.
+>>>DISABLED:3
+
+emerging-games > all
+>>>DISABLED:0
+
+emerging-icmp > all except:
+2100448 GPL ICMP Source Quench undefined code <<< akamai
+2100499 GPL ICMP Large ICMP Packet <<< Fires up from CARP IPv6 address to normal interface address.
+2100459 GPL ICMP unassigned type 1 undefined code <<< Orly? Type 1 = Destination unreachable. Codes 0-7. See RFC4443
+>>>DISABLED:3
+
+emerging-icmp_info > !!! CARE !!! THESE ARE INFORMATIONAL RULES. EXPECT A LOT OF FALSE POSITIVES! all except:
+2100384 GPL ICMP_INFO PING <<< obvious
+2100399 GPL ICMP_INFO Destination Unreachable Host Unreachable <<< obvious
+2100401 GPL ICMP_INFO Destination Unreachable Network Unreachable <<< obvious
+2100402 GPL ICMP_INFO Destination Unreachable Port Unreachable <<< obvious
+2100404 GPL ICMP_INFO Destination Unreachable Protocol Unreachable <<< obvious
+2100408 GPL ICMP_INFO Echo Reply <<< obvious
+2100485 GPL ICMP_INFO Destination Unreachable Communication Administratively Prohibited <<< obvious
+2100486 GPL ICMP_INFO Destination Unreachable Communication with Destination Host is Administratively Prohibited <<< obvious
+2100385 GPL ICMP_INFO traceroute <<< obvious
+2100382 GPL ICMP_INFO PING Windows <<< obvious
+>>>DISABLED:10
+
+emerging-imap > all
+>>>DISABLED:0
+
+emerging-inappropriate > all except:
+2001353 ET INAPPROPRIATE BDSM <<< ET guys have hit a new low on this one. It fired up while syncing a debian mirror, FFS. Either fire your damn rule writer, or write better rules!
+>>>DISABLED:1
+
+emerging-info > all except:
+2014472 ET INFO JAVA - Java Archive Download <<< obvious
+2014473 ET INFO JAVA - Java Archive Download By Vulnerable Client <<< fires up on linux jre, since it's considered an "old" version
+2014819 ET INFO Packed Executable Download <<< obvious
+2015016 ET INFO FTP STOR to External Network <<< obvious
+2015561 ET INFO PDF Using CCITTFax Filter <<< compressed PDFs
+2015744 ET INFO EXE IsDebuggerPresent (Used in Malware Anti-Debugging) <<< antivirus
+2016360 ET INFO JAVA - ClassID <<< contains java?
+2016361 ET INFO JAVA - ClassID <<< contains java?
+2016404 ET INFO MPEG Download Over HTTP (1) <<< obvious
+2015674 ET INFO 3XX redirect to data URL <<< yandex
+2016847 ET INFO Possible Chrome Plugin install <<< obvious
+2017669 ET INFO Zip File <<< obvious
+>>>DISABLED:12
+
+emerging-malware > all except:
+2008438 ET MALWARE Possible Windows executable sent when remote host claims to send a Text File  <<< akamai, drivers
+2012229 ET MALWARE Suspicious Chinese Content-Language zh-cn Which May be Malware Related <<< alibaba/aliexpress
+>>>DISABLED:2
+
+emerging-misc > all
+>>>DISABLED:0
+
+emerging-mobile_malware > all except:
+2012251 ET MOBILE_MALWARE Google Android Device HTTP Request <<< since when is android considered malware?!?! DELETE UPSTREAM AND BAN THE RULE MAINTAINER FROM THE PROJECT on the grounds of criminal stupidity
+2012848 ET MOBILE_MALWARE Possible Mobile Malware POST of IMEI International Mobile Equipment Identity in URI <<< apple
+>>>DISABLED:2
+
+emerging-p2p > all except:
+2008581 ET P2P BitTorrent DHT ping request <<< breaks torrents
+2008583 ET P2P BitTorrent DHT nodes reply <<< breaks torrents
+2011699 ET P2P Bittorrent P2P Client User-Agent (Transmission/1.x) <<< obvious
+>>>DISABLED:3
+
+emerging-policy > all except:
+2000419 ET POLICY PE EXE or DLL Windows file download <<< antivirus updates
+2000428 ET POLICY ZIP file download <<< obvious
+2001115 ET POLICY MSI (microsoft installer file) download <<< obvious
+2002749 ET POLICY Unallocated IP Space Traffic - Bogon Nets   <<<<<<<< handled by ticking block bogon networks in interface settings
+2002752 ET POLICY Reserved Internal IP Traffic    <<<<<<<<<<<<< handled by ticking block private networks in interface settings
+2003595 ET POLICY exe download via HTTP - Informational <<< breaks windows updates
+2001908 ET POLICY eBay View Item <<< obvious
+2002878 ET POLICY iTunes User Agent <<< obvious
+2001978 ET POLICY SSH session in progress on Expected Port <<< obvious
+2009004 ET POLICY Login Credentials Possibly Passed in POST Data <<< obvious
+2003214 ET POLICY Pingdom.com Monitoring detected <<< obvious
+2003006 ET POLICY TLS/SSL Client Key Exchange on Unusual Port <<< playstore
+2003012 ET POLICY TLS/SSL Server Certificate Exchange on Unusual Port <<< Fires up on play store. UPDATE UPSTREAM. EXCLUDE PORT 5228
+2002828 ET POLICY Googlebot User Agent <<< breaks googlebot
+2002829 ET POLICY Googlebot Crawl <<< *screaming at the top of my lungs* GOOGLE IS COMING!!!LOCK THE GATES!!!GOOGLE IS COMING!!!ZOMG!1elevenonehundredandeleven!GOOGLE IS COMING!!!!. *normal voice* who the hell writes these rules???
+2002830 ET POLICY Msnbot User Agent <<< breaks bingbot
+2002831 ET POLICY Msnbot Crawl <<< breaks bingbot
+2010228 ET POLICY Suspicious Microsoft Windows NT 6.1 User-Agent Detected <<< so WTF is windows 7 then??? DELETE UPSTREAM
+2002948 ET POLICY External Windows Update in Progress <<< breaks windows updates
+2002949 ET POLICY Windows Update in Progress <<< breaks windows updates
+2001404 ET POLICY ZIPPED EXE in transit <<< obvious
+2010070 ET POLICY Data POST to an image file (png) <<< fun explaining to your client that a web designer has no idea how to design a page...
+2101620 GPL POLICY TRAFFIC Non-Standard IP protocol <<< breaks IPv6 tunnels
+2101438 GPL POLICY Windows Media Video download <<< obvious
+2100524 GPL POLICY tcp port 0 traffic <<< handled by custom rule
+2012141 ET POLICY Protocol 41 IPv6 encapsulation potential 6in4 IPv6 tunnel active <<< breaks IPv6 tunnels
+2012843 ET POLICY Cleartext WordPress Login <<< obvious. Technically a valid rule, but not everybody wants to buy an SSL certificate for his/her site.
+2012885 ET POLICY Http Client Body contains password= in cleartext <<< obvious
+2012915 ET POLICY URL Contains pw Parameter <<< obvious
+2013028 ET POLICY curl User-Agent Outbound <<< obvious
+2013255 ET POLICY Majestic12 User-Agent Request Inbound <<< obvious
+2013290 ET POLICY MOBILE Apple device leaking UDID from SpringBoard via GET <<< apple
+2013459 ET POLICY Facebook Like Button Clicked (2) <<< obvious
+2013504 ET POLICY GNU/Linux APT User-Agent Outbound likely related to package management <<< obvious
+2013505 ET POLICY GNU/Linux YUM User-Agent Outbound likely related to package management <<< obvious
+2015878 ET POLICY Maxmind geoip check to /app/geoip.js <<< obvious
+2012647 ET POLICY Dropbox.com Offsite File Backup in Use <<< obvious
+2003597 ET POLICY Google Calendar in Use <<< obvious
+2011854 ET POLICY Java JAR file download <<< obvious
+2006380 ET POLICY Outgoing Basic Auth Base64 HTTP Password detected unencrypted <<< When you convince every webmaster to use an SSL certificate for his/her sites, then enable this rule. Until then, no, just no.
+2006408 ET POLICY HTTP Request on Unusual Port Possibly Hostile <<< breaks apt repository key import
+2013296 ET POLICY Free SSL Certificate Provider (StartCom Class 1 Primary Intermediate Server CA) <<< obvious
+2014726 ET POLICY Outdated Windows Flash Version IE <<< Technically a valid rule. Having your clients drop off the internet for failing to update their flash isn't valid though.
+2018959 ET POLICY PE EXE or DLL Windows file download HTTP <<< windows updates
+2007671 ET POLICY Binary Download Smaller than 1 MB Likely Hostile <<< windows updates
+2003020 ET POLICY TLS/SSL Encrypted Application Data on Unusual Port <<< Google market. Possibly autoupdates. Must add Google market ports to exceptions. Update upstream
+2001402 ET POLICY ZIPPED DOC in transit <<< obvious. Not so obvious when it fires up when syncing debian mirror
+2001403 ET POLICY ZIPPED XLS in transit <<< obvious.
+2017015 ET POLICY DropBox User Content Access over SSL  <<< obvious
+2009033 ET POLICY Suspicious Executable (Win exe under 128) <<< adobe flash player downloader
+2000418 ET POLICY Executable and linking format (ELF) file download <<< freebsd iso download
+2001375 ET POLICY Credit Card Number Detected in Clear (16 digit spaced) <<< freebsd iso download
+2001379 ET POLICY Credit Card Number Detected in Clear (15 digit spaced) <<< freebsd iso download
+2002722 ET POLICY MP3 File Transfer Outbound <<< obvious
+2002723 ET POLICY MP3 File Transfer Inbound <<< obvious
+2011584 ET POLICY Vulnerable Java Version 1.4.x Detected <<< In a stroke of pure genius, ET have created a rule so that if java wants to auto update, the rule will fire up. PURE GENIUS!
+2011581 ET POLICY Vulnerable Java Version 1.5.x Detected <<< see above
+2011582 ET POLICY Vulnerable Java Version 1.6.x Detected <<< see above
+2014297 ET POLICY Vulnerable Java Version 1.7.x Detected <<< see above
+2019401 ET POLICY Vulnerable Java Version 1.8.x Detected <<< see above
+2019240 ET POLICY Executable and linking format (ELF) file download Over HTTP <<< drivers/firmware
+2019416 ET POLICY SSLv3 outbound connection from client vulnerable to POODLE attack <<< not everything can be upgraded, eg android phones. False positives
+>>>DISABLED:62
+
+emerging-pop3 > all
+>>>DISABLED:0
+
+emerging-rpc > all
+>>>DISABLED:0
+
+emerging-scada > all
+>>>DISABLED:0
+
+emerging-scan > all except:
+2000538 ET SCAN NMAP -sA (1) <<< googlebot
+2000540 ET SCAN NMAP -sA (2) <<< googlebot
+2011367 ET SCAN TCP Traffic (ET SCAN Malformed Packet SYN FIN) <<< microsoft
+2002995 ET SCAN Rapid IMAPS Connections - Possible Brute Force Attack <<< happens when you have a lot of mailboxes
+>>>DISABLED:4
+
+emerging-shellcode > all except:
+2011803 ET SHELLCODE Possible TCP x86 JMP to CALL Shellcode Detected <<< akamai
+2012510 ET SHELLCODE UTF-8/16 Encoded Shellcode <<< random alerts on good sites
+2012256 ET SHELLCODE Common 0c0c0c0c Heap Spray String <<< fires up when syncing debian mirror
+2012086 ET SHELLCODE Possible Call with No Offset TCP Shellcode <<< fires up when syncing debian mirror
+2012088 ET SHELLCODE Possible Call with No Offset TCP Shellcode <<< fires up when syncing debian mirror
+2012252 ET SHELLCODE Common 0a0a0a0a Heap Spray String <<< fires up when syncing debian mirror
+2100649 GPL SHELLCODE x86 setgid 0 <<< youtube, akamai
+2101390 GPL SHELLCODE x86 inc ebx NOOP <<< freebsd iso download
+2100651 GPL SHELLCODE x86 stealth NOOP <<< freebsd iso download
+2102314 GPL SHELLCODE x86 0x90 NOOP unicode <<< freebsd iso download
+2013319 ET SHELLCODE Unicode UTF-8 Heap Spray Attempt  <<< debian mirror
+2013222 ET SHELLCODE Excessive Use of HeapLib Objects Likely Malicious Heap Spray Attempt <<< dangerous rule based on cleartext HTTP. Fires up on known good sites when repeated occurences of *heap* is encountered.
+2100648 GPL SHELLCODE x86 NOOP <<< Downloading FreeBSD memstick image
+2100653 GPL SHELLCODE x86 0x90 unicode NOOP <<< Downloading FreeBSD memstick image
+>>>DISABLED:14
+
+emerging-smtp > all except:
+2100567 GPL SMTP SMTP relaying denied <<< obvious
+>>>DISABLED:1
+
+emerging-snmp > all
+>>>DISABLED:0
+
+emerging-sql > all except:
+2102329 GPL SQL probe response overflow attempt <<< DNS servers
+>>>DISABLED:1
+
+emerging-trojan > all except:
+2009205 ET TROJAN Possible Downadup/Conficker-C P2P encrypted traffic UDP Ping Packet (bit value 1) <<< breaks viber
+2009206 ET TROJAN Possible Downadup/Conficker-C P2P encrypted traffic UDP Ping Packet (bit value 4) <<< breaks viber
+2009207 ET TROJAN Possible Downadup/Conficker-C P2P encrypted traffic UDP Ping Packet (bit value 5) <<< breaks viber
+2009208 ET TROJAN Possible Downadup/Conficker-C P2P encrypted traffic UDP Ping Packet (bit value 16) <<< breaks viber
+2001046 ET TROJAN UPX compressed file download possible malware <<< driver downloads
+2016950 ET TROJAN Possible Win32/Hupigon ip.txt with a Non-Mozilla UA <<< breaks custom list update script
+2009080 ET TROJAN VMProtect Packed Binary Inbound via HTTP - Likely Hostile <<< windows updates
+2019509 ET TROJAN JST Perl IrcBot download <<< Text based rule. Fires up on emergingthreats.net
+>>>DISABLED:8
+
+emerging-user_agents > all except:
+2003394 ET USER_AGENTS User Agent Containing http Suspicious - Likely Spyware/Trojan <<< wordpress updates
+2010697 ET USER_AGENTS Suspicious User-Agent Beginning with digits - Likely spyware/trojan <<< apple
+2009295 ET USER_AGENTS Suspicious Mozilla User-Agent Likely Fake (Mozilla/5.0) <<< yandex,firefox, icedove, various crawlers, the entire Internet, planet Mars... basically everything that exists out there.
+2012180 ET USER_AGENTS Suspicious User Agent no space <<< random false positives
+>>>DISABLED:4
+
+emerging-voip > all
+>>>DISABLED:0
+
+emerging-web_client > all except
+2011347 ET WEB_CLIENT Possible String.FromCharCode Javascript Obfuscation Attempt <<< akamai
+2011507 ET WEB_CLIENT PDF With Embedded File <<< obvious
+2010514 ET WEB_CLIENT Possible HTTP 401 XSS Attempt (External Source) <<< obvious
+2010516 ET WEB_CLIENT Possible HTTP 403 XSS Attempt (External Source) <<< obvious
+2010518 ET WEB_CLIENT Possible HTTP 404 XSS Attempt (External Source) <<< obvious
+2010520 ET WEB_CLIENT Possible HTTP 405 XSS Attempt (External Source) <<< obvious
+2010522 ET WEB_CLIENT Possible HTTP 406 XSS Attempt (External Source) <<< obvious
+2010525 ET WEB_CLIENT Possible HTTP 500 XSS Attempt (External Source) <<< obvious
+2010527 ET WEB_CLIENT Possible HTTP 503 XSS Attempt (External Source) <<< obvious
+2012056 ET WEB_CLIENT Flash Player Flash6.ocx AllowScriptAccess Denial of Service <<< can't remember why
+2012075 ET WEB_CLIENT Possible Internet Explorer CSS Parser Remote Code Execution Attempt <<< outdated sites,outdated rule
+2012119 ET WEB_CLIENT Possible Hex Obfuscation Usage On Webpage <<< can't remember why
+2012205 ET WEB_CLIENT Possible Malicious String.fromCharCode with charCodeAt String <<< can't remember why
+2012266 ET WEB_CLIENT Hex Obfuscation of unescape % Encoding <<< fires up when downloading zipped drivers
+2012272 ET WEB_CLIENT Hex Obfuscation of eval % Encoding <<< fires up when downloading zipped drivers
+2012398 ET WEB_CLIENT Hex Obfuscation of replace Javascript Function % Encoding <<< fires up when downloading zipped drivers
+2010931 ET WEB_CLIENT Possible IE iepeers.dll Use-after-free Code Execution Attempt <<< outdated rule
+2011764 ET WEB_CLIENT Possible Microsoft Internet Explorer mshtml.dll Timer ID Memory Pointer Information Disclosure Attempt <<< outdated rule
+2102925 GPL WEB_CLIENT web bug 0x0 gif attempt <<< ebay
+2103088 GPL WEB_CLIENT winamp .cda file name overflow attempt <<< debian mirror
+2103192 GPL WEB_CLIENT Windows Media Player directory traversal via Content-Disposition attempt  <<< A rule about a vulnerability that was fixed in Windows XP SP2 (2003), firing up in 2014 is a bit too much, even for me.
+2103134 GPL WEB_CLIENT PNG large colour depth download attempt <<< debian mirror
+>>>DISABLED:22
+
+emerging-web_server > all except:
+2101852 GPL WEB_SERVER robots.txt access <<< DELETE UPSTREAM!
+2015526 ET WEB_SERVER Fake Googlebot UA 1 Inbound <<< fires up on googlebot. *ding* *ding* *ding* YOU are CORRECT sir DELETE UPSTREAM. I would like to take a few moments and remind everyone the years I've spent trying to get this rule deleted. It's an obvious fail of the rule maintainer and he is just too embarassed to admit it.
+2009151 ET WEB_SERVER PHP Generic Remote File Include Attempt (HTTP) <<< obvious
+2012997 ET WEB_SERVER PHP Possible http Remote File Inclusion Attempt <<< obvious
+2101201 GPL WEB_SERVER 403 Forbidden <<< *facepalm* *sigh* Some rule writers/maintainers have the false impression that writing "1337" rules makes them look smart. It doesn't. It makes them look like 6 year olds. HINT: Detecting a >>>>SINGLE<<<< 403 error is an insult to my intelligence. I'm personally offended by this rule. At least make it a rapid 403 error rule.
+2016672 ET WEB_SERVER SQL Errors in HTTP 200 Response (error in your SQL syntax) <<< obvious
+>>>DISABLED:6
+
+emerging-web_specific_apps > all except:
+2003508 ET WEB_SPECIFIC_APPS Wordpress wp-login.php redirect_to credentials stealing attempt <<< fires up when a wordpress blog is linked to facebook (at least that's what the client is claiming, it's his site anyway)
+>>>DISABLED:1
+
+emerging-worm > all
+>>>DISABLED:0
+
+files > all except:
+1:1 FILEEXT JPG file claimed <<< obvious
+1:3 FILEEXT BMP file claimed <<< obvious
+1:6 FILESTORE jpg <<< obvious
+1:10 FILEMAGIC jpg(1) <<< obvious
+1:11 FILEMAGIC jpg(2) <<< obvious
+1:18 FILE magic -- windows <<< windows updates
+1:19 FILE tracking PNG (1x1 pixel) (1) <<< breaks "good" sites. If you want internet, you better get used to tracking
+1:21 FILE tracking GIF (1x1 pixel) <<< breaks "good" sites. If you want internet, you better get used to tracking
+1:22 FILE pdf claimed, but not pdf <<< fires up when spiders (eg googlebot) try to download a part of a pdf, therefore DELETE UPSTREAM
+>>>DISABLED:9
+
+http-events > all except
+2221000 SURICATA HTTP unknown error <<< breaks windows updates
+2221001 SURICATA HTTP gzip decompression failed <<< can't remember, I *think* akamai
+2221010 SURICATA HTTP unable to match response to request <<< random false positives on good sites
+2221022 SURICATA HTTP multipart generic error <<< detects client (browser) errors, random FPs.
+>>> DISABLED:4
+
+smtp-events > all
+2220000 SURICATA SMTP invalid reply <<< known good clients
+2220008 SURICATA SMTP data command rejected <<< don't remember why...
+>>>DISABLED:2
+
+stream-events > disable all
+>>>DISABLED:50
+
+tls-events > all except
+2230002 SURICATA TLS invalid record type <<< random false positives (eg yahoo)
+2230003 SURICATA TLS invalid handshake message <<< breaks viber
+>>>DISABLED:2
